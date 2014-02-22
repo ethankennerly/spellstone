@@ -1,5 +1,5 @@
 TODO
-	Select letters to fill grid from Big IQ Kids grade 1.
+	Letters of word are adjacent.
 	Max 8 letters in word selected.
 	Grades.
 	Easy words in easy reading order.
@@ -164,4 +164,21 @@ Sat 02/22/2014
 08:09
 
 SPELL WORDS TO CLEAR THE BOARD.A ONE-DAY GAME BY ETHAN KENNERLY, FEBRUARY 22, 2014
+
+Sat 02/22/2014 
+14:40
+
+Shuffled letters is hard.  In order is easy.  
+
+Fill randomly, fit remainder.
+Fill from corners.
+Compose tiles.
+Swap some letters.
+Fill board by shapes.  
+
+Set possibles at corners.
+Randomly select cell from possibles to be a cursor.
+Select a random neighbor to spell a word.
+If no neighbor, select from possibles.
+
 

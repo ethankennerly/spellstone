@@ -185,6 +185,8 @@ package com.finegamedesign.spellstone
                 nextFrame();
             }
             if (level <= 0) {
+                model.score = 0;
+                model.restartScore = 0;
                 restart();
             }
             else {

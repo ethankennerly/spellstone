@@ -46,14 +46,10 @@ package com.finegamedesign.spellstone
                 table = levelParams.diagram.split("");
             }
             else {
-                table = [];
                 cellCount = rowCount * columnCount;
-                var letters:Array = shuffleLetters(Words.lists[0],
+                var words:Array = shuffleWords(Words.lists[0],
                     cellCount, LETTER_MIN);
-                for (var c:int = 0; c < cellCount; c++) {
-                    table.push(letters[c]);
-                }
-                shuffle(table);
+                table = fillTable(words, columnCount, rowCount);
             }
             selected = [];
             kill = 0;
@@ -69,26 +65,98 @@ package com.finegamedesign.spellstone
             return letter;
         }
 
-        private function shuffleLetters(list:Array,
+        private function shuffleWords(list:Array,
                 cellCount:int, wordLength:int):Array
         {
-            var letters:Array = [];
+            var words:Array = [];
             shuffle(list);
-            while (letters.length < cellCount) {
-                for (var s:int = 0; letters.length < cellCount 
+            var letterCount:int = 0;
+            while (letterCount < cellCount) {
+                for (var s:int = 0; letterCount < cellCount 
                                     && s < list.length; s++) {
                     var word:String = list[s];
                     if (word.length == wordLength) {
-                        trace("Model.shuffleLetters: " + word);
-                        letters = letters.concat(word.split(""));
+                        trace("Model.shuffleWords: " + word);
+                        words.push(word);
+                        letterCount += word.length;
                     }
                 }
             }
-            if (cellCount < letters.length) {
-                throw new Error("Expected exactly one letter for each cell.  Got " + letters.length + " letters for " + cellCount + " cells.");
+            if (cellCount < letterCount) {
+                throw new Error("Expected exactly one letter for each cell.  Got " + letterCount + " letters for " + cellCount + " cells.");
             }
-            shuffle(letters);
-            return letters;
+            return words;
+        }
+
+        /**
+         * Set possibles at corners.
+         * Randomly select cell from possibles to be a cursor.
+         * Select a random neighbor to spell a word.
+         * If no neighbor, select from possibles.
+         */ 
+        private function fillTable(words:Array, columnCount:int, rowCount:int):Array
+        {
+            var table:Array = [];
+            var cellCount:int = columnCount * rowCount;
+            for (var c:int = 0; c < cellCount; c++) {
+                table.push(EMPTY);
+            }
+            for (var w:int = 0; w < words.length; w++) {
+                var cursor:int = corner(table, columnCount, rowCount);
+                for (var i:int = 0; i < words[w].length; i++) {
+                    table[cursor] = words[w].substr(i, 1);
+                    cursor = liberty(table, cursor, columnCount, rowCount);
+                }
+            }
+            return table;
+        }
+
+        private function corner(table:Array, columnCount:int, rowCount:int):int
+        {
+            var cellCount:int = columnCount * rowCount;
+            for (var c:int = 0; c < cellCount; c++) {
+                if (table[c] == EMPTY) {
+                    return c;
+                }
+            }
+            return -1;
+        }
+
+        private function liberty(table:Array, cursor:int, columnCount:int, rowCount:int):int
+        {
+            var neighbors:Array = [];
+            var neighbor:int;
+            if (columnCount <= cursor) {
+                neighbor = cursor - columnCount;
+                if (EMPTY == table[neighbor]) {
+                    neighbors.push(neighbor);
+                }
+            }
+            if (cursor < rowCount * (columnCount - 1)) {
+                neighbor = cursor + columnCount;
+                if (EMPTY == table[neighbor]) {
+                    neighbors.push(neighbor);
+                }
+            }
+            if (1 <= cursor % columnCount) {
+                neighbor = cursor - 1;
+                if (EMPTY == table[neighbor]) {
+                    neighbors.push(neighbor);
+                }
+            }
+            if (cursor % columnCount < columnCount - 1) {
+                neighbor = cursor + 1;
+                if (EMPTY == table[neighbor]) {
+                    neighbors.push(neighbor);
+                }
+            }
+            if (neighbors.length == 0) {
+                return corner(table, columnCount, rowCount);
+            }
+            else {
+                shuffle(neighbors);
+                return neighbors[0];
+            }
         }
 
         private function shuffle(array:Array):void
