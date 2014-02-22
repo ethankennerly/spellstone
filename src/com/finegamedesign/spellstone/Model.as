@@ -4,7 +4,6 @@ package com.finegamedesign.spellstone
     {
         internal static const EMPTY:String = " ";
         internal static const LETTER_MAX:int = 8;
-
         internal static var levels:Array = [
             {columnCount: 5, rowCount: 1, diagram: "START"},
             {columnCount: 3, rowCount: 2},
@@ -15,6 +14,7 @@ package com.finegamedesign.spellstone
             {columnCount: 6, rowCount: 4},
             {columnCount: 7, rowCount: 5}
         ];
+        private static const ALPHABET:Array = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
         internal var diagram:String;
         internal var kill:int;
@@ -50,7 +50,8 @@ package com.finegamedesign.spellstone
                 table = [];
                 cellCount = rowCount * columnCount;
                 for (var c:int = 0; c < cellCount; c++) {
-                    var letter:String;
+                    var i:int = Math.random() * ALPHABET.length;
+                    var letter:String = ALPHABET[i];
                     table.push(letter);
                 }
                 shuffle(table);
@@ -100,6 +101,15 @@ package com.finegamedesign.spellstone
             return push;
         }
 
+        private function spell(selected:Array, letters:Array):String
+        {
+            var word:String = "";
+            for (var s:int = 0; s < selected.length; s++) {
+                word += letters[selected[s]];
+            }
+            return word;
+        }
+
         /**
          * Removed addresses if 3 or more.
          * Set index to EMPTY and cell to null, in case view still refers to cell.
@@ -109,14 +119,18 @@ package com.finegamedesign.spellstone
             var selectedMin:int = 3;
             var removed:Array = [];
             if (selectedMin <= selected.length) {
-                removed = selected.slice();
-                // trace("Model.judge: removed " + removed);
-                for each(var address:int in removed) {
-                    table[address] = EMPTY;
-                }
-                scoreUp(removed.length);
-                if (null != onDie) {
-                    onDie();
+                var word:String = spell(selected, table);
+                trace("Model.judge: word <" + word + ">");
+                if (Words.has(word)) {
+                    removed = selected.slice();
+                    trace("Model.judge: removed " + removed);
+                    for each(var address:int in removed) {
+                        table[address] = EMPTY;
+                    }
+                    scoreUp(removed.length);
+                    if (null != onDie) {
+                        onDie();
+                    }
                 }
             }
             selected = [];

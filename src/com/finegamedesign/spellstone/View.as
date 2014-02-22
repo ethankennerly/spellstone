@@ -55,14 +55,12 @@ package com.finegamedesign.spellstone
                 cell.scaleY = scale;
                 cell.txt.mouseEnabled = false;
                 cell.name = "cell_" + i.toString();
-                cell.addEventListener(MouseEvent.MOUSE_DOWN, selectDown, false, 0, true);
-                cell.buttonMode = true;
                 room.addChild(cell);
                 table.push(cell);
             }
             updateCells(model, table);
             room.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown, false, 0, true);
-            ui.submit.addEventListener(MouseEvent.MOUSE_DOWN, judge, false, 0, true);
+            ui.submit.addEventListener(MouseEvent.CLICK, judge, false, 0, true);
         }
 
         private function position(mc:MovieClip, i:int, columnCount:int, rowCount:int):void
@@ -142,10 +140,22 @@ package com.finegamedesign.spellstone
                     :  (0 <= model.selected.indexOf(t) 
                         ? "select"
                         : "enable");
+                var changed:Boolean = false;
                 if (cell.currentLabel != label) {
+                    changed = true;
                     cell.gotoAndPlay(label);
                 }
                 position(cell, t, model.columnCount, model.rowCount);
+                if (changed) {
+                    if (Model.EMPTY == model.table[t]) {
+                        cell.removeEventListener(MouseEvent.MOUSE_DOWN, selectDown);
+                        cell.buttonMode = false;
+                    }
+                    else {
+                        cell.buttonMode = true;
+                        cell.addEventListener(MouseEvent.MOUSE_DOWN, selectDown, false, 0, true);
+                    }
+                }
             }
             updateSelected(ui, model.selected);
         }
@@ -153,7 +163,7 @@ package com.finegamedesign.spellstone
         private function updateSelected(ui:Main, selected:Array):void
         {
             for (var i:int = 0; i < Model.LETTER_MAX; i++) {
-                var selection:MovieClip = ui["selected_" + i];
+                var selection:LetterTile = ui["selected_" + i].tile;
                 var label:String =  i < selected.length
                                     ? "select" 
                                     : "none";
@@ -163,6 +173,7 @@ package com.finegamedesign.spellstone
                 var text:String = i < selected.length 
                                   ? model.table[selected[i]] 
                                   : Model.EMPTY;
+                selection.txt.text = text;
             }
         }
 
@@ -171,10 +182,8 @@ package com.finegamedesign.spellstone
          */
         private function judge(e:MouseEvent):void
         {
-            if (mouseJustPressed) {
-                model.judge();
-                updateCells(model, table);
-            }
+            model.judge();
+            updateCells(model, table);
         }
 
         internal function clear():void

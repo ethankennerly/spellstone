@@ -1,7 +1,5 @@
 TODO
 	Recognize 'START' in a free dictionary from InfoChimps.
-	Specify grid.
-	Read START.
 	Select letters to fill grid.
 	Click letters to spell a word.  Click submit to clear.
 	Click letters to remove those letters.

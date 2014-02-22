@@ -38,14 +38,14 @@ package com.finegamedesign.spellstone
         public var score_txt:TextField;
         public var restartTrial_btn:SimpleButton;
 
-        public var selected_0:MovieClip;
-        public var selected_1:MovieClip;
-        public var selected_2:MovieClip;
-        public var selected_3:MovieClip;
-        public var selected_4:MovieClip;
-        public var selected_5:MovieClip;
-        public var selected_6:MovieClip;
-        public var selected_7:MovieClip;
+        public var selected_0:LetterSelected;
+        public var selected_1:LetterSelected;
+        public var selected_2:LetterSelected;
+        public var selected_3:LetterSelected;
+        public var selected_4:LetterSelected;
+        public var selected_5:LetterSelected;
+        public var selected_6:LetterSelected;
+        public var selected_7:LetterSelected;
         public var submit:SimpleButton;
 
         private var inTrial:Boolean;
@@ -66,6 +66,7 @@ package com.finegamedesign.spellstone
 
         public function init(event:Event=null):void
         {
+            Words.init();
             inTrial = false;
             level = 1;
             maxLevel = Model.levels.length;
