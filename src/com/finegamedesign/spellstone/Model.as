@@ -4,17 +4,16 @@ package com.finegamedesign.spellstone
     {
         internal static const EMPTY:String = " ";
         internal static const LETTER_MAX:int = 8;
+        internal static const LETTER_MIN:int = 3;
         internal static var levels:Array = [
             {columnCount: 5, rowCount: 1, diagram: "START"},
             {columnCount: 3, rowCount: 2},
             {columnCount: 3, rowCount: 3},
             {columnCount: 4, rowCount: 3},
             {columnCount: 5, rowCount: 3},
-            {columnCount: 5, rowCount: 4},
-            {columnCount: 6, rowCount: 4},
-            {columnCount: 7, rowCount: 5}
+            {columnCount: 6, rowCount: 3},
+            {columnCount: 6, rowCount: 4}
         ];
-        private static const ALPHABET:Array = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
         internal var diagram:String;
         internal var kill:int;
@@ -49,10 +48,10 @@ package com.finegamedesign.spellstone
             else {
                 table = [];
                 cellCount = rowCount * columnCount;
+                var letters:Array = shuffleLetters(Words.lists[0],
+                    cellCount, LETTER_MIN);
                 for (var c:int = 0; c < cellCount; c++) {
-                    var i:int = Math.random() * ALPHABET.length;
-                    var letter:String = ALPHABET[i];
-                    table.push(letter);
+                    table.push(letters[c]);
                 }
                 shuffle(table);
             }
@@ -60,6 +59,36 @@ package com.finegamedesign.spellstone
             kill = 0;
             restartScore = score;
             maxKill = columnCount * rowCount;
+        }
+
+        private static function randomLetter():String
+        {
+            var ALPHABET:Array = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+            var i:int = Math.random() * ALPHABET.length;
+            var letter:String = ALPHABET[i];
+            return letter;
+        }
+
+        private function shuffleLetters(list:Array,
+                cellCount:int, wordLength:int):Array
+        {
+            var letters:Array = [];
+            shuffle(list);
+            while (letters.length < cellCount) {
+                for (var s:int = 0; letters.length < cellCount 
+                                    && s < list.length; s++) {
+                    var word:String = list[s];
+                    if (word.length == wordLength) {
+                        trace("Model.shuffleLetters: " + word);
+                        letters = letters.concat(word.split(""));
+                    }
+                }
+            }
+            if (cellCount < letters.length) {
+                throw new Error("Expected exactly one letter for each cell.  Got " + letters.length + " letters for " + cellCount + " cells.");
+            }
+            shuffle(letters);
+            return letters;
         }
 
         private function shuffle(array:Array):void
@@ -116,9 +145,8 @@ package com.finegamedesign.spellstone
          */
         internal function judge():Array
         {
-            var selectedMin:int = 3;
             var removed:Array = [];
-            if (selectedMin <= selected.length) {
+            if (LETTER_MIN <= selected.length) {
                 var word:String = spell(selected, table);
                 trace("Model.judge: word <" + word + ">");
                 if (Words.has(word)) {

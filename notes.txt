@@ -1,20 +1,16 @@
 TODO
-	Recognize 'START' in a free dictionary from InfoChimps.
-	Select letters to fill grid.
-	Click letters to spell a word.  Click submit to clear.
-	Click letters to remove those letters.
-	Score points by length of word.  
-	Click to restart.
-	Free word list from Big IQ Kids.
+	Select letters to fill grid from Big IQ Kids grade 1.
+	Max 8 letters in word selected.
 	Grades.
 	Easy words in easy reading order.
 	Mix easy and difficult words.
 	Score by grade.
 	Validate word with each letter.
-	Max 8 letters.
+	If length or word not valid, hide submit button.
 	Upload to finegamedesign.com/spellstone.
 	Upload to Kongregate.
 	Tidy names.
+	Compresss word list.
 
 Sat 02/08/2014 
 21:21
