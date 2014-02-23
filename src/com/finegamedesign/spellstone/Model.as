@@ -6,7 +6,7 @@ package com.finegamedesign.spellstone
         internal static const LETTER_MAX:int = 8;
         internal static const LETTER_MIN:int = 3;
         internal static var levels:Array = [
-            {columnCount: 5, rowCount: 1, diagram: "START"},
+            {columnCount: 4, rowCount: 1, diagram: "PLAY"},
             {columnCount: 3, rowCount: 2},
             {columnCount: 3, rowCount: 3},
             {columnCount: 4, rowCount: 3},
@@ -111,18 +111,34 @@ package com.finegamedesign.spellstone
             return table;
         }
 
+        /**
+         * Random with least neighbors.  Except, avoid isolated.
+         */
         private function corner(table:Array, columnCount:int, rowCount:int):int
         {
+            var neighborCounts:Array = [[], [], [], [], []];
             var cellCount:int = columnCount * rowCount;
+            var n:int;
+            var index:int = -1;
             for (var c:int = 0; c < cellCount; c++) {
                 if (table[c] == EMPTY) {
-                    return c;
+                    // return c;
+                    n = adjacents(table, c, columnCount, rowCount).length;
+                    neighborCounts[n].push(c);
                 }
             }
-            return -1;
+            neighborCounts.push(neighborCounts.shift());
+            for (n = 0; n < neighborCounts.length; n++) {
+                if (1 <= neighborCounts[n].length) {
+                    shuffle(neighborCounts[n]);
+                    index = neighborCounts[n][0];
+                }
+            }
+            trace("Model.corner: " + index + " table <" + table + ">");
+            return index;
         }
 
-        private function liberty(table:Array, cursor:int, columnCount:int, rowCount:int):int
+        private function adjacents(table:Array, cursor:int, columnCount:int, rowCount:int):Array
         {
             var neighbors:Array = [];
             var neighbor:int;
@@ -150,6 +166,12 @@ package com.finegamedesign.spellstone
                     neighbors.push(neighbor);
                 }
             }
+            return neighbors;
+        }
+
+        private function liberty(table:Array, cursor:int, columnCount:int, rowCount:int):int
+        {
+            var neighbors:Array = adjacents(table, cursor, columnCount, rowCount);
             if (neighbors.length == 0) {
                 return corner(table, columnCount, rowCount);
             }
