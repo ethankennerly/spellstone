@@ -38,6 +38,7 @@ package com.finegamedesign.spellstone
         internal var roundMax:int = levels.length;  
                                     // 1;  // debug
         internal var words:Array;
+        internal var valid:Boolean;
 
         public function Model()
         {
@@ -72,6 +73,7 @@ package com.finegamedesign.spellstone
             kill = 0;
             restartScore = score;
             maxKill = columnCount * rowCount;
+            valid = updateValid();
         }
 
         private static function randomLetter():String
@@ -267,6 +269,7 @@ package com.finegamedesign.spellstone
                     onDeselect();
                 }
             }
+            valid = updateValid();
             return push;
         }
 
@@ -279,6 +282,19 @@ package com.finegamedesign.spellstone
             return word;
         }
 
+        private function updateValid():Boolean
+        {
+            valid = false;
+            if (LETTER_MIN <= selected.length) {
+                var word:String = spell(selected, table);
+                if (Words.has(word)) {
+                    trace("Model.updateValid: word <" + word + ">");
+                    valid = true;
+                }
+            }
+            return valid;
+        }
+
         /**
          * Removed addresses if 3 or more.
          * Set index to EMPTY and cell to null, in case view still refers to cell.
@@ -286,19 +302,17 @@ package com.finegamedesign.spellstone
         internal function judge():Array
         {
             var removed:Array = [];
-            if (LETTER_MIN <= selected.length) {
-                var word:String = spell(selected, table);
-                // trace("Model.judge: word <" + word + ">");
-                if (Words.has(word)) {
-                    removed = selected.slice();
-                    // trace("Model.judge: removed " + removed);
-                    for each(var address:int in removed) {
-                        table[address] = EMPTY;
-                    }
-                    scoreUp(removed.length);
+            valid = updateValid();
+            if (valid) {
+                removed = selected.slice();
+                trace("Model.judge: removed " + removed);
+                for each(var address:int in removed) {
+                    table[address] = EMPTY;
                 }
+                scoreUp(removed.length);
             }
             selected = [];
+            valid = updateValid();
             return removed;
         }
    

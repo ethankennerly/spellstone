@@ -1,6 +1,4 @@
 TODO
-	Most original words probably have a contiguous path.
-	Validate word with each letter.
 	If length or word not valid, hide submit button.
 	Limit 6x3 until higher grade.
 	Positive words.

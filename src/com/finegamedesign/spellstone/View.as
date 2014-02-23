@@ -175,6 +175,7 @@ package com.finegamedesign.spellstone
                                   : Model.EMPTY;
                 selection.txt.text = text;
             }
+            ui.submit.visible = model.valid;
         }
 
         /**
