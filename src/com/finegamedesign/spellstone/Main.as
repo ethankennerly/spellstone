@@ -81,6 +81,7 @@ package com.finegamedesign.spellstone
 
         public function init(event:Event=null):void
         {
+            removeEventListener(Event.ADDED_TO_STAGE, init);
             Words.init();
             inTrial = false;
             level = 1;
@@ -119,12 +120,14 @@ package com.finegamedesign.spellstone
 
         public function trial(level:int):void
         {
-            inTrial = true;
-            mouseChildren = true;
-            model.kill = 0;
-            model.maxKill = 0;
-            model.populate(Model.levels[level - 1]);
-            view.populate(model, room, this);
+            if (!inTrial) {
+                inTrial = true;
+                mouseChildren = true;
+                model.kill = 0;
+                model.maxKill = 0;
+                model.populate(Model.levels[level - 1]);
+                view.populate(model, room, this);
+            }
         }
 
         private function updateHudText():void
@@ -209,17 +212,19 @@ package com.finegamedesign.spellstone
 
         public function next():void
         {
-            view.clear();
-            feedback.txt.text = "";
-            feedback.gotoAndPlay("none");
-            mouseChildren = true;
-            if (currentFrame < totalFrames) {
-                nextFrame();
+            if (!inTrial) {
+                view.clear();
+                feedback.txt.text = "";
+                feedback.gotoAndPlay("none");
+                mouseChildren = true;
+                if (currentFrame < totalFrames) {
+                    nextFrame();
+                }
+                if (level <= 1 || model.roundMax <= model.round) {
+                    restart();
+                }
+                trial(level);
             }
-            if (level <= 1 || model.roundMax <= model.round) {
-                restart();
-            }
-            trial(level);
         }
 
         public function restart():void

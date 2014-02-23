@@ -379,7 +379,6 @@ package com.finegamedesign.spellstone
                 }
             }
             score = restartScore;
-            round++;
         }
 
         internal function update():int
