@@ -196,7 +196,6 @@ package com.finegamedesign.spellstone
 
         private function lose():void
         {
-            view.clear();
             inTrial = false;
             if (3 <= level) {
                 level = Math.max(2, level - 1);
@@ -210,6 +209,7 @@ package com.finegamedesign.spellstone
 
         public function next():void
         {
+            view.clear();
             feedback.txt.text = "";
             feedback.gotoAndPlay("none");
             mouseChildren = true;

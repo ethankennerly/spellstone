@@ -136,7 +136,7 @@ package com.finegamedesign.spellstone
                 cell.txt.text = model.table[t];
                 var label:String = 
                     Model.EMPTY == model.table[t]
-                    ? "none" 
+                    ? model.removedLabels[t]
                     :  (0 <= model.selected.indexOf(t) 
                         ? "select"
                         : "enable");
@@ -147,7 +147,7 @@ package com.finegamedesign.spellstone
                 }
                 position(cell, t, model.columnCount, model.rowCount);
                 if (changed) {
-                    if (Model.EMPTY == model.table[t]) {
+                    if (Model.EMPTY == model.table[t] || model.removedLabels[t].indexOf("correct_") == 0) {
                         cell.removeEventListener(MouseEvent.MOUSE_DOWN, selectDown);
                         cell.buttonMode = false;
                     }
@@ -193,10 +193,16 @@ package com.finegamedesign.spellstone
             updateCells(model, table);
             for (var t:int = table.length - 1; 0 <= t; t--) {
                 var mc:MovieClip = table[t];
+                mc.gotoAndPlay("none");
                 if (room.contains(mc)) {
                     room.removeChild(mc);
                 }
                 table.splice(t, 1);
+            }
+            for (var c:int = room.numChildren - 1; 0 <= c; c--) {
+                if (room.getChildAt(c) is LetterTile) {
+                    room.removeChild(room.getChildAt(c));
+                }
             }
         }
     }

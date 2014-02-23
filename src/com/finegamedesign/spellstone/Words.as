@@ -5,8 +5,10 @@ package com.finegamedesign.spellstone
         internal static var lists:Array;
 
         private static var hash:Object;
+        /*--*/
         [Embed(source="../../../../txt/word_list_moby_crossword.flat.txt", mimeType="application/octet-stream")]
         private static const AllWordList:Class;
+        //-*/
         [Embed(source="../../../../txt/bigiqkids.com_wordlist_spelling_grade_1.txt", mimeType="application/octet-stream")]
         private static const Grade1List:Class;
         [Embed(source="../../../../txt/bigiqkids.com_wordlist_spelling_grade_2.txt", mimeType="application/octet-stream")]
@@ -29,7 +31,9 @@ package com.finegamedesign.spellstone
         internal static function init():void
         {
             if (null == hash) {
-                hash = constructHash(String(new AllWordList()));
+                hash = 
+                        //- WordHash.hash;
+                        constructHash(String(new AllWordList()));
             }
             if (null == lists) {
                 lists = [["PLAY"]];

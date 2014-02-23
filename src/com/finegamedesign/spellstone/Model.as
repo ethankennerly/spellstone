@@ -37,6 +37,7 @@ package com.finegamedesign.spellstone
         internal var round:int;
         internal var roundMax:int = levels.length;  
                                     // 1;  // debug
+        internal var removedLabels:Array;
         internal var words:Array;
         internal var valid:Boolean;
 
@@ -58,22 +59,32 @@ package com.finegamedesign.spellstone
             for (var param:String in levelParams) {
                 this[param] = levelParams[param];
             }
+            cellCount = rowCount * columnCount;
             if ("diagram" in levelParams) {
                 table = levelParams.diagram.split("");
                 words = [levelParams.diagram];
             }
             else {
-                cellCount = rowCount * columnCount;
                 words = shuffleWords(Words.lists, grade,
                     cellCount, LETTER_MIN, LETTER_MAX);
                 table = fillTable(words, columnCount, rowCount);
                 round++;
             }
+            removedLabels = populateRemovedLabels(cellCount);
             selected = [];
             kill = 0;
             restartScore = score;
             maxKill = columnCount * rowCount;
             valid = updateValid();
+        }
+
+        private function populateRemovedLabels(cellCount:int):Array
+        {
+            var removedLabels:Array = [];
+            for (var c:int = 0; c < cellCount; c++) {
+                removedLabels[c] = "none";
+            }
+            return removedLabels;
         }
 
         private static function randomLetter():String
@@ -288,7 +299,7 @@ package com.finegamedesign.spellstone
             if (LETTER_MIN <= selected.length) {
                 var word:String = spell(selected, table);
                 if (Words.has(word)) {
-                    trace("Model.updateValid: word <" + word + ">");
+                    // trace("Model.updateValid: word <" + word + ">");
                     valid = true;
                 }
             }
@@ -305,8 +316,9 @@ package com.finegamedesign.spellstone
             valid = updateValid();
             if (valid) {
                 removed = selected.slice();
-                trace("Model.judge: removed " + removed);
+                // trace("Model.judge: removed " + removed);
                 for each(var address:int in removed) {
+                    removedLabels[address] = "correct_" + removed.length;
                     table[address] = EMPTY;
                 }
                 scoreUp(removed.length);
@@ -360,6 +372,7 @@ package com.finegamedesign.spellstone
          */
         internal function clear():void
         {
+            removedLabels = populateRemovedLabels(cellCount);
             for (var i:int = 0; i < table.length; i++) {
                 if (null != table[i]) {
                     table[i] = EMPTY;

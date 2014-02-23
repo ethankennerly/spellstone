@@ -11,6 +11,9 @@ TODO
 	Easy words near reading order.
 	"I" does not look like 1.
 	Tidy names.
+	Compound words.
+	Animate score.
+	By length, gemstones
 
 Sat 02/08/2014 
 21:21
