@@ -1,8 +1,5 @@
 TODO
-	Wrong.  Read words.
-	If too few letters left, auto restart.
-	Fit letters nearby.
-	If finish, clear all letters.
+	10 rounds after Play.
 	Words by grades.
 	Easy words near reading order.
 	Mix easy and difficult words.
@@ -16,6 +13,7 @@ TODO
 	Compresss word list.
 	Positive words.
 	If no vowel, auto restart.
+	Click input to remove.
 
 Sat 02/08/2014 
 21:21

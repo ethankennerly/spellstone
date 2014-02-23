@@ -95,7 +95,6 @@ package com.finegamedesign.spellstone
 
         private function restartTrial(e:MouseEvent):void
         {
-            view.clear();
             lose();
         }
 
@@ -116,8 +115,8 @@ package com.finegamedesign.spellstone
             highScore_txt.text = model.highScore.toString();
             level_txt.text = level.toString();
             maxLevel_txt.text = maxLevel.toString();
-            kill_txt.text = model.kill.toString();
-            maxKill_txt.text = model.maxKill.toString();
+            kill_txt.text = model.round.toString();
+            maxKill_txt.text = model.roundMax.toString();
         }
 
         private function update(event:Event):void
@@ -160,8 +159,8 @@ package com.finegamedesign.spellstone
         {
             inTrial = false;
             level++;
-            if (Model.levels.length < level) {
-                level = 0;
+            if (Model.levels.length <= level) {
+                level = 1;
                 feedback.gotoAndPlay("complete");
                 complete.play();
             }
@@ -174,7 +173,11 @@ package com.finegamedesign.spellstone
 
         private function lose():void
         {
+            view.clear();
             inTrial = false;
+            if (3 <= level) {
+                level = Math.max(2, level - 1);
+            }
             FlxKongregate.api.stats.submit("Score", model.score);
             mouseChildren = false;
             feedback.gotoAndPlay("wrong");
@@ -190,20 +193,16 @@ package com.finegamedesign.spellstone
             if (currentFrame < totalFrames) {
                 nextFrame();
             }
-            if (level <= 0) {
-                model.score = 0;
-                model.restartScore = 0;
+            if (level <= 1 || model.roundMax <= model.round) {
                 restart();
             }
-            else {
-                trial(level);
-            }
+            trial(level);
         }
 
         public function restart():void
         {
+            model.restart();
             level = 1;
-            trial(level);
             mouseChildren = true;
             gotoAndPlay(1);
         }

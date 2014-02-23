@@ -29,12 +29,21 @@ package com.finegamedesign.spellstone
         internal var highScore:int;
         internal var score:int;
         internal var restartScore:int;
+        internal var round:int;
+        internal var roundMax:int = levels.length;  
+                                    // 1;  // debug
         internal var words:Array;
 
         public function Model()
         {
-            score = 0;
             highScore = 0;
+            restart();
+        }
+
+        internal function restart():void
+        {
+            round = 1;
+            score = 0;
             restartScore = 0;
         }
 
@@ -52,6 +61,7 @@ package com.finegamedesign.spellstone
                 words = shuffleWords(Words.lists[0],
                     cellCount, LETTER_MIN, LETTER_MAX);
                 table = fillTable(words, columnCount, rowCount);
+                round++;
             }
             selected = [];
             kill = 0;
@@ -291,6 +301,7 @@ package com.finegamedesign.spellstone
                 }
             }
             score = restartScore;
+            round++;
         }
 
         internal function update():int
