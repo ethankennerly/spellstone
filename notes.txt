@@ -1,10 +1,10 @@
 TODO
+	Load in under 10 seconds.
 	If length or word not valid, hide submit button.
 	Limit 6x3 until higher grade.
 	Positive words.
 	Reset without reshuffling.
 	Kongregate users expect mute button.
-	Compresss word list.
 	If no vowel, auto restart.
 	Click input to remove.
 	Score by grade.
