@@ -48,7 +48,7 @@ package com.finegamedesign.spellstone
             else {
                 cellCount = rowCount * columnCount;
                 var words:Array = shuffleWords(Words.lists[0],
-                    cellCount, LETTER_MIN);
+                    cellCount, LETTER_MIN, LETTER_MAX);
                 table = fillTable(words, columnCount, rowCount);
             }
             selected = [];
@@ -65,8 +65,11 @@ package com.finegamedesign.spellstone
             return letter;
         }
 
+        /**
+         * 
+         */
         private function shuffleWords(list:Array,
-                cellCount:int, wordLength:int):Array
+                cellCount:int, minLength:int, maxLength:int):Array
         {
             var words:Array = [];
             shuffle(list);
@@ -74,9 +77,14 @@ package com.finegamedesign.spellstone
             while (letterCount < cellCount) {
                 for (var s:int = 0; letterCount < cellCount 
                                     && s < list.length; s++) {
+                    if (cellCount - letterCount < 2 * minLength) {
+                        minLength = cellCount - letterCount;
+                    }
+                    maxLength = Math.max(minLength, 
+                        Math.min(maxLength, cellCount - letterCount - minLength));
                     var word:String = list[s];
-                    if (word.length == wordLength) {
-                        trace("Model.shuffleWords: " + word);
+                    if (minLength <= word.length && word.length <= maxLength) {
+                        trace("Model.shuffleWords: " + word + " min " + minLength + " max " + maxLength);
                         words.push(word);
                         letterCount += word.length;
                     }

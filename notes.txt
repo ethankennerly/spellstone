@@ -1,16 +1,18 @@
 TODO
-	Letters of word are adjacent.
-	Max 8 letters in word selected.
+	3 to 8 random length of letters in each word.
 	Grades.
-	Easy words in easy reading order.
+	Wrong.  Read words.
+	Easy words near reading order.
 	Mix easy and difficult words.
 	Score by grade.
 	Validate word with each letter.
 	If length or word not valid, hide submit button.
 	Upload to finegamedesign.com/spellstone.
 	Upload to Kongregate.
+	Reset without reshuffling.
 	Tidy names.
 	Compresss word list.
+	Positive words.
 
 Sat 02/08/2014 
 21:21
@@ -181,4 +183,9 @@ Randomly select cell from possibles to be a cursor.
 Select a random neighbor to spell a word.
 If no neighbor, select from possibles.
 
+
+Sat 02/22/2014 
+16:40
+
+Planning several words ahead feels tedious to then click those words.
 
