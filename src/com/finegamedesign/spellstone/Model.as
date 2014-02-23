@@ -105,7 +105,7 @@ package com.finegamedesign.spellstone
 
                     var word:String = list[s];
                     if (Words.has(word) && minLength <= word.length && word.length <= maxLength && words.indexOf(word) <= -1) {
-                        trace("Model.shuffleWords: " + word + " min " + minLength + " max " + maxLength + " grade " + grade);
+                        // trace("Model.shuffleWords: " + word + " min " + minLength + " max " + maxLength + " grade " + grade);
                         words.push(word);
                         letterCount += word.length;
                         if (2 <= grade) {
@@ -123,6 +123,7 @@ package com.finegamedesign.spellstone
         }
 
         /**
+         * Try to keep words contiguous.
          * Set possibles at corners.
          * Randomly select cell from possibles to be a cursor.
          * Select a random neighbor to spell a word.
@@ -130,19 +131,33 @@ package com.finegamedesign.spellstone
          */ 
         private function fillTable(words:Array, columnCount:int, rowCount:int):Array
         {
-            var table:Array = [];
-            var cellCount:int = columnCount * rowCount;
-            for (var c:int = 0; c < cellCount; c++) {
-                table.push(EMPTY);
-            }
-            for (var w:int = 0; w < words.length; w++) {
-                var cursor:int = corner(table, columnCount, rowCount);
-                for (var i:int = 0; i < words[w].length; i++) {
-                    table[cursor] = words[w].substr(i, 1);
-                    cursor = liberty(table, cursor, columnCount, rowCount);
+            var attempts:int = 64;
+            var tables:Array = [];
+            for (var attempt:int = 0; attempt < attempts; attempt++) {
+                var islands:int = 0;
+                var table:Array = [];
+                var cellCount:int = columnCount * rowCount;
+                for (var c:int = 0; c < cellCount; c++) {
+                    table.push(EMPTY);
+                }
+                for (var w:int = 0; w < words.length; w++) {
+                    var cursor:int = corner(table, columnCount, rowCount);
+                    for (var i:int = 0; i < words[w].length; i++) {
+                        table[cursor] = words[w].substr(i, 1);
+                        cursor = liberty(table, cursor, columnCount, rowCount);
+                        if (-1 == cursor) {
+                            cursor = corner(table, columnCount, rowCount);
+                            islands++;
+                        }
+                    }
+                }
+                tables.push({islands: islands, table: table});
+                if (0 == islands) {
+                    break;
                 }
             }
-            return table;
+            tables.sortOn("islands", Array.NUMERIC);
+            return tables[0].table;
         }
 
         /**
@@ -169,7 +184,7 @@ package com.finegamedesign.spellstone
                     break;
                 }
             }
-            trace("Model.corner: " + index + " table <" + table + ">");
+            // trace("Model.corner: " + index + " table <" + table + ">");
             return index;
         }
 
@@ -208,7 +223,7 @@ package com.finegamedesign.spellstone
         {
             var neighbors:Array = adjacents(table, cursor, columnCount, rowCount);
             if (neighbors.length == 0) {
-                return corner(table, columnCount, rowCount);
+                return -1;
             }
             else {
                 shuffle(neighbors);
@@ -273,10 +288,10 @@ package com.finegamedesign.spellstone
             var removed:Array = [];
             if (LETTER_MIN <= selected.length) {
                 var word:String = spell(selected, table);
-                trace("Model.judge: word <" + word + ">");
+                // trace("Model.judge: word <" + word + ">");
                 if (Words.has(word)) {
                     removed = selected.slice();
-                    trace("Model.judge: removed " + removed);
+                    // trace("Model.judge: removed " + removed);
                     for each(var address:int in removed) {
                         table[address] = EMPTY;
                     }

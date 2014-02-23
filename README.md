@@ -1,7 +1,7 @@
 Spellstone
 ==========
 
-Spell words to clear the board.
+Spell words to clear the board and graduate.
 
 CLICK any 3 or more letters that spell a word.
 Clear the board to advance to the next grade.

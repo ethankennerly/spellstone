@@ -1,21 +1,18 @@
 TODO
-	Word lists by grades.
-	Easy words near reading order.
-	Most each original word is a contiguous path.
-	Mix easy and difficult words.
+	Most original words probably have a contiguous path.
 	Validate word with each letter.
-	Quiet sounds.
-	Mute button.
 	If length or word not valid, hide submit button.
-	Upload to finegamedesign.com/spellstone.
-	Upload to Kongregate.
+	Limit 6x3 until higher grade.
 	Positive words.
 	Reset without reshuffling.
-	Tidy names.
+	Kongregate users expect mute button.
 	Compresss word list.
 	If no vowel, auto restart.
 	Click input to remove.
 	Score by grade.
+	Easy words near reading order.
+	"I" does not look like 1.
+	Tidy names.
 
 Sat 02/08/2014 
 21:21
