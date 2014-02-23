@@ -79,6 +79,10 @@ package com.finegamedesign.spellstone
             addEventListener(Event.ENTER_FRAME, update, false, 0, true);
             level_txt.addEventListener(MouseEvent.CLICK, cheatLevel, false, 0, true);
             restartTrial_btn.addEventListener(MouseEvent.CLICK, restartTrial, false, 0, true);
+            feedback.txt.text = "";
+            feedback.mouseEnabled = false;
+            feedback.mouseChildren = false;
+            feedback.txt.mouseEnabled = false;
         }
 
         private function cheatLevel(event:MouseEvent):void
@@ -174,11 +178,13 @@ package com.finegamedesign.spellstone
             FlxKongregate.api.stats.submit("Score", model.score);
             mouseChildren = false;
             feedback.gotoAndPlay("wrong");
+            feedback.txt.text = "EXAMPLES:\n" + model.words.join(", ");
             wrong.play();
         }
 
         public function next():void
         {
+            feedback.txt.text = "";
             feedback.gotoAndPlay("none");
             mouseChildren = true;
             if (currentFrame < totalFrames) {

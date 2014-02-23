@@ -20,4 +20,8 @@ A one-day game by Ethan Kennerly (February 22, 2014)
 
 Inspired by Jumble Jong on Yahoo Games.
 http://games.yahoo.com/game/jumble-jong-yap.html
+Free word list from Moby via InfoChimps.
+Free grade level spelling word list by Big IQ Kids.
+
+Added "JUNE" to Moby word list.
 

@@ -190,7 +190,7 @@ package com.finegamedesign.spellstone
         {
             model.clear();
             updateCells(model, table);
-            for (var t:int = 0; t < table.length; t++) {
+            for (var t:int = table.length - 1; 0 <= t; t--) {
                 var mc:MovieClip = table[t];
                 if (room.contains(mc)) {
                     room.removeChild(mc);

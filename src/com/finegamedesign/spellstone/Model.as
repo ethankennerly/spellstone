@@ -29,6 +29,7 @@ package com.finegamedesign.spellstone
         internal var highScore:int;
         internal var score:int;
         internal var restartScore:int;
+        internal var words:Array;
 
         public function Model()
         {
@@ -44,10 +45,11 @@ package com.finegamedesign.spellstone
             }
             if ("diagram" in levelParams) {
                 table = levelParams.diagram.split("");
+                words = [levelParams.diagram];
             }
             else {
                 cellCount = rowCount * columnCount;
-                var words:Array = shuffleWords(Words.lists[0],
+                words = shuffleWords(Words.lists[0],
                     cellCount, LETTER_MIN, LETTER_MAX);
                 table = fillTable(words, columnCount, rowCount);
             }
@@ -269,7 +271,7 @@ package com.finegamedesign.spellstone
         private function scoreUp(length:int):void
         {
             kill += length;
-            var points:int = Math.pow(2, length - 2);
+            var points:int = Math.pow(2, length - 3);
             points *= 10;
             score += points;
             if (highScore < score) {
@@ -306,10 +308,21 @@ package com.finegamedesign.spellstone
             if (maxKill <= kill) {
                 winning = 1;
             }
-            else if (false) {
+            else if (occupied(table) < LETTER_MIN) {
                 winning = -1;
             }
             return winning;
+        }
+        
+        private function occupied(table:Array):int
+        {
+            var count:int = 0;
+            for (var c:int = 0; c < table.length; c++) {
+                if (EMPTY != table[c]) {
+                    count++;
+                }
+            }
+            return count;
         }
     }
 }
