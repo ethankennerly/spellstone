@@ -1,19 +1,21 @@
 TODO
-	10 rounds after Play.
-	Words by grades.
+	Word lists by grades.
 	Easy words near reading order.
+	Most each original word is a contiguous path.
 	Mix easy and difficult words.
-	Score by grade.
 	Validate word with each letter.
+	Quiet sounds.
+	Mute button.
 	If length or word not valid, hide submit button.
 	Upload to finegamedesign.com/spellstone.
 	Upload to Kongregate.
+	Positive words.
 	Reset without reshuffling.
 	Tidy names.
 	Compresss word list.
-	Positive words.
 	If no vowel, auto restart.
 	Click input to remove.
+	Score by grade.
 
 Sat 02/08/2014 
 21:21

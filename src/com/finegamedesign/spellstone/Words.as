@@ -9,6 +9,22 @@ package com.finegamedesign.spellstone
         private static const AllWordList:Class;
         [Embed(source="../../../../txt/bigiqkids.com_wordlist_spelling_grade_1.txt", mimeType="application/octet-stream")]
         private static const Grade1List:Class;
+        [Embed(source="../../../../txt/bigiqkids.com_wordlist_spelling_grade_2.txt", mimeType="application/octet-stream")]
+        private static const Grade2List:Class;
+        [Embed(source="../../../../txt/bigiqkids.com_wordlist_spelling_grade_3.txt", mimeType="application/octet-stream")]
+        private static const Grade3List:Class;
+        [Embed(source="../../../../txt/bigiqkids.com_wordlist_spelling_grade_4.txt", mimeType="application/octet-stream")]
+        private static const Grade4List:Class;
+        [Embed(source="../../../../txt/bigiqkids.com_wordlist_spelling_grade_5.txt", mimeType="application/octet-stream")]
+        private static const Grade5List:Class;
+        [Embed(source="../../../../txt/bigiqkids.com_wordlist_spelling_grade_6.txt", mimeType="application/octet-stream")]
+        private static const Grade6List:Class;
+        [Embed(source="../../../../txt/bigiqkids.com_wordlist_spelling_grade_7.txt", mimeType="application/octet-stream")]
+        private static const Grade7List:Class;
+        [Embed(source="../../../../txt/bigiqkids.com_wordlist_spelling_grade_8.txt", mimeType="application/octet-stream")]
+        private static const Grade8List:Class;
+        [Embed(source="../../../../txt/bigiqkids.com_wordlist_vocabulary_sat.txt", mimeType="application/octet-stream")]
+        private static const Grade9List:Class;
 
         internal static function init():void
         {
@@ -16,8 +32,16 @@ package com.finegamedesign.spellstone
                 hash = constructHash(String(new AllWordList()));
             }
             if (null == lists) {
-                lists = [];
+                lists = [["PLAY"]];
                 lists.push(array(String(new Grade1List())));
+                lists.push(array(String(new Grade2List())));
+                lists.push(array(String(new Grade3List())));
+                lists.push(array(String(new Grade4List())));
+                lists.push(array(String(new Grade5List())));
+                lists.push(array(String(new Grade6List())));
+                lists.push(array(String(new Grade7List())));
+                lists.push(array(String(new Grade8List())));
+                lists.push(array(String(new Grade9List())));
             }
         }
 
@@ -42,9 +66,12 @@ package com.finegamedesign.spellstone
             return hash;
         }
 
+        /**
+         * Multiple words parsed separately.
+         */
         private static function array(wordList:String):Array
         {
-            return wordList.replace(/\r\n/g, "\n").split("\n");
+            return wordList.replace(/\r\n/g, "\n").replace(" ", "\n").split("\n");
         }
     }
 }

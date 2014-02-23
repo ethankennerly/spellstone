@@ -7,22 +7,27 @@ package com.finegamedesign.spellstone
         internal static const LETTER_MIN:int = 3;
         internal static var levels:Array = [
             {columnCount: 4, rowCount: 1, diagram: "PLAY"},
-            {columnCount: 3, rowCount: 2},
-            {columnCount: 3, rowCount: 3},
-            {columnCount: 4, rowCount: 3},
-            {columnCount: 5, rowCount: 3},
-            {columnCount: 6, rowCount: 3},
-            {columnCount: 6, rowCount: 4}
+            {columnCount: 3, rowCount: 2, grade: 1},
+            {columnCount: 3, rowCount: 3, grade: 2},
+            {columnCount: 4, rowCount: 3, grade: 3},
+            {columnCount: 5, rowCount: 3, grade: 4},
+            {columnCount: 6, rowCount: 3, grade: 5},
+            {columnCount: 6, rowCount: 4, grade: 6},
+            {columnCount: 6, rowCount: 4, grade: 7},
+            {columnCount: 6, rowCount: 4, grade: 8},
+            {columnCount: 6, rowCount: 4, grade: 9}
         ];
 
         internal var diagram:String;
         internal var kill:int;
         internal var maxKill:int;
+        internal var grade:int;
         internal var cellCount:int;
         internal var columnCount:int;
         internal var onContagion:Function;
         internal var onDeselect:Function;
         internal var onDie:Function;
+        internal var onDieBonus:Function;
         internal var rowCount:int;
         internal var selected:Array;
         internal var table:Array;
@@ -58,7 +63,7 @@ package com.finegamedesign.spellstone
             }
             else {
                 cellCount = rowCount * columnCount;
-                words = shuffleWords(Words.lists[0],
+                words = shuffleWords(Words.lists, grade,
                     cellCount, LETTER_MIN, LETTER_MAX);
                 table = fillTable(words, columnCount, rowCount);
                 round++;
@@ -78,14 +83,17 @@ package com.finegamedesign.spellstone
         }
 
         /**
-         * 
+         * First word from grade level, then next lower grade.
+         * Same word not added twice.
+         * Ignore words not in all valid words list.
          */
-        private function shuffleWords(list:Array,
+        private function shuffleWords(lists:Array, grade:int,
                 cellCount:int, minLength:int, maxLength:int):Array
         {
             var words:Array = [];
-            shuffle(list);
             var letterCount:int = 0;
+            var list:Array = lists[grade];
+            shuffle(list);
             while (letterCount < cellCount) {
                 for (var s:int = 0; letterCount < cellCount 
                                     && s < list.length; s++) {
@@ -94,11 +102,17 @@ package com.finegamedesign.spellstone
                     }
                     maxLength = Math.max(minLength, 
                         Math.min(maxLength, cellCount - letterCount - minLength));
+
                     var word:String = list[s];
-                    if (minLength <= word.length && word.length <= maxLength) {
-                        trace("Model.shuffleWords: " + word + " min " + minLength + " max " + maxLength);
+                    if (Words.has(word) && minLength <= word.length && word.length <= maxLength && words.indexOf(word) <= -1) {
+                        trace("Model.shuffleWords: " + word + " min " + minLength + " max " + maxLength + " grade " + grade);
                         words.push(word);
                         letterCount += word.length;
+                        if (2 <= grade) {
+                            grade--;
+                            list = lists[grade];
+                            shuffle(list);
+                        }
                     }
                 }
             }
@@ -152,6 +166,7 @@ package com.finegamedesign.spellstone
                 if (1 <= neighborCounts[n].length) {
                     shuffle(neighborCounts[n]);
                     index = neighborCounts[n][0];
+                    break;
                 }
             }
             trace("Model.corner: " + index + " table <" + table + ">");
@@ -266,9 +281,6 @@ package com.finegamedesign.spellstone
                         table[address] = EMPTY;
                     }
                     scoreUp(removed.length);
-                    if (null != onDie) {
-                        onDie();
-                    }
                 }
             }
             selected = [];
@@ -286,6 +298,30 @@ package com.finegamedesign.spellstone
             score += points;
             if (highScore < score) {
                 highScore = score;
+            }
+            bonus(length);
+        }
+
+        private function bonus(length:int):void
+        {
+            if (null != onDie) {
+                var bonus:int = 0;
+                if (length <= Model.LETTER_MIN + 1) {
+                    bonus = 0;
+                }
+                else if (length <= Model.LETTER_MIN + 2) {
+                    bonus = 1;
+                }
+                else if (length <= Model.LETTER_MIN + 3) {
+                    bonus = 2;
+                }
+                else if (length < Model.LETTER_MAX) {
+                    bonus = 3;
+                }
+                else {
+                    bonus = 4;
+                }
+                onDie(bonus);
             }
         }
 

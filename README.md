@@ -11,8 +11,8 @@ Longer words score bonus points.
 Click a selected letter to remove it from the word.
 Clearing the board graduates to a higher grade.
 
-Can you pass kindegarten?
-Can you pass 8th grade?
+Can you pass 1st grade?
+Can you pass 10th grade?
 
 To cheat to a higher grade, click the level number and then click Restart.
 

@@ -5,6 +5,8 @@ package com.finegamedesign.spellstone
     import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.media.Sound;
+    import flash.media.SoundMixer;
+    import flash.media.SoundTransform;
     import flash.text.TextField;
     import flash.utils.getTimer;
 
@@ -27,6 +29,19 @@ package com.finegamedesign.spellstone
         [Embed(source="../../../../sfx/die.mp3")]
         private static var dieClass:Class;
         private var die:Sound = new dieClass();
+        [Embed(source="../../../../sfx/bonus.mp3")]
+        private static var bonusClass:Class;
+        private var bonus:Sound = new bonusClass();
+        [Embed(source="../../../../sfx/bonus2.mp3")]
+        private static var bonus2Class:Class;
+        private var bonus2:Sound = new bonus2Class();
+        [Embed(source="../../../../sfx/bonus3.mp3")]
+        private static var bonus3Class:Class;
+        private var bonus3:Sound = new bonus3Class();
+        [Embed(source="../../../../sfx/bonus4.mp3")]
+        private static var bonus4Class:Class;
+        private var bonus4:Sound = new bonus4Class();
+        private var bonuses:Array;
 
         public var feedback:MovieClip;
         public var highScore_txt:TextField;
@@ -72,8 +87,9 @@ package com.finegamedesign.spellstone
             maxLevel = Model.levels.length;
             model = new Model();
             model.onContagion = contagion.play;
-            model.onDie = correct.play;
-            model.onDeselect = wrong.play;
+            model.onDie = scoreUp;
+            model.onDieBonus = bonus.play;
+            model.onDeselect = die.play;
             view = new View();
             trial(level);
             addEventListener(Event.ENTER_FRAME, update, false, 0, true);
@@ -83,6 +99,9 @@ package com.finegamedesign.spellstone
             feedback.mouseEnabled = false;
             feedback.mouseChildren = false;
             feedback.txt.mouseEnabled = false;
+            bonuses = [correct, bonus, bonus2, bonus3, bonus4];
+            var transform:SoundTransform = new SoundTransform(0.25);
+            SoundMixer.soundTransform = transform;
         }
 
         private function cheatLevel(event:MouseEvent):void
@@ -155,18 +174,22 @@ package com.finegamedesign.spellstone
             }
         }
 
+        private function scoreUp(bonus:int):void
+        {
+            bonuses[bonus].play();
+        }
+
         private function win():void
         {
             inTrial = false;
             level++;
-            if (Model.levels.length <= level) {
+            if (Model.levels.length < level) {
                 level = 1;
                 feedback.gotoAndPlay("complete");
                 complete.play();
             }
             else {
                 feedback.gotoAndPlay("correct");
-                correct.play();
             }
             FlxKongregate.api.stats.submit("Score", model.score);
         }
